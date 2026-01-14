@@ -8,10 +8,10 @@ public class DisparosJugador : NetworkBehaviour
     
     [SerializeField] private Transform spawnPoint;
 
-    [SerializeField] private float fuerzaAcumulada = 5f;
-    [SerializeField] private float fuerzaMinima = 5f;
-    [SerializeField] private float limiteFuerza = 15f;
-    [SerializeField] private float ratioPorSegundo = 3f;
+    [SerializeField] private float fuerzaAcumulada;
+    [SerializeField] private float fuerzaMinima;
+    [SerializeField] private float limiteFuerza;
+    [SerializeField] private float ratioPorSegundo;
 
     //En términos de red, este es como el Awake/Start
     public override void OnNetworkSpawn()
@@ -46,11 +46,11 @@ public class DisparosJugador : NetworkBehaviour
     private void SpawnProyectilServerRpc(float resultadoFuerza)
     {
         NetworkObject copia = Instantiate(proyectilPrefab, spawnPoint.position, spawnPoint.rotation);
+        copia.Spawn(); //OBLIGATORIO EN TERMINOS DE RED. (SPAWNS Y DESTRUCCIONES)
 
         //Aplicar una fuerza tipo IMPULSO a la copia en su dirección: transform.forward
         copia.GetComponent<Rigidbody>().AddForce(copia.transform.forward * resultadoFuerza, ForceMode.Impulse);
 
-        copia.Spawn(); //OBLIGATORIO ESTE SEGUNDO PASO EN TERMINOS DE RED. (SPAWNS Y DESTRUCCIONES)
     }
 
 }
